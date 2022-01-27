@@ -35,12 +35,11 @@ app.MapPost("/SaveToFile", async (string receivedValue, ReceivedValuesDbContext 
     
     Note note = new Note();
     note.ReceivedNote = receivedValue;
-
+    receivedValuesDbContext.Notes.Add(note);
+    receivedValuesDbContext.SaveChanges();
     await semaphoreSlim.WaitAsync();
     try
     {
-        receivedValuesDbContext.Notes.Add(note);
-        receivedValuesDbContext.SaveChanges();
         using var writeFile = File.AppendText("receivedValues.txt");
         await writeFile.WriteLineAsync(receivedValue);
     }
