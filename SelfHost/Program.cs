@@ -52,5 +52,27 @@ app.MapPost("/SaveToFile", async (string receivedValue, ReceivedValuesDbContext 
         semaphoreSlim.Release();
     }
 });
+//Receive Value2
+app.MapPost("/SaveToFile2", async (string receivedValue, ReceivedValuesDbContext receivedValuesDbContext) =>
+{
 
+    Note note = new Note();
+    note.ReceivedNote = receivedValue;
+    receivedValuesDbContext.Notes.Add(note);
+    receivedValuesDbContext.SaveChanges();
+    await semaphoreSlim.WaitAsync();
+    try
+    {
+        using var writeFile = File.AppendText("receivedValues.txt");
+        await writeFile.WriteLineAsync(receivedValue);
+    }
+    catch (Exception)
+    {
+        throw;
+    }
+    finally
+    {
+        semaphoreSlim.Release();
+    }
+});
 app.Run();
