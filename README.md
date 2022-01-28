@@ -1,5 +1,5 @@
 # SelfHost
-SelfHost service with .net6 for Raion
+SelfHost service with .net6 for Raion with two endPoints
 
 After running client one should be able to connect via losalhost:7560
 
